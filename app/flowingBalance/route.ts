@@ -53,13 +53,13 @@ function generateSVG(
   return `
         <svg width="191" height="100" viewBox="0 0 191 100" xmlns="http://www.w3.org/2000/svg">
             <rect width="100%" height="100%" fill="white"/>
-            <text x="50%" y="40" fill="#1DB227" font-size="24px" font-family="Arial" text-anchor="middle">
+            <text x="50%" y="40" fill="#1DB227" font-size="24px" font-family="Caveat" text-anchor="middle">
                 ${userName}
             </text>
-            <text x="50%" y="55" fill="black" font-size="8px" font-family="Arial" text-anchor="middle">
+            <text x="50%" y="55" fill="black" font-size="8px" font-family="Caveat" text-anchor="middle">
                 ${alreadyTxt}
             </text>
-            <text x="50%" y="70" fill="black" font-size="8px" font-family="Arial" text-anchor="middle">
+            <text x="50%" y="70" fill="black" font-size="8px" font-family="Caveat" text-anchor="middle">
                 Your balance:
             </text>
             ${texts}

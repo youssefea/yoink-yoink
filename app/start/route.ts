@@ -61,33 +61,7 @@ export async function POST(req) {
   const { untrustedData } = data;
   const { fid } = untrustedData;
 
-  const _query = followingQuery(fid);
-  const { data: results } = await fetchQuery(_query, {
-    id: fid,
-  });
 
-  const input: CheckIsFollowingFarcasterUserInput = {
-    fid: fid,
-    isFollowing: [Number(process.env.FID)],
-  };
-  const { data: data1, error: error1 }: CheckIsFollowingFarcasterUserOutput =
-    await checkIsFollowingFarcasterUser(input);
-
-  console.log(data1);
-
-  const _query2 = walletQuery(fid);
-  const { data: results2 } = await fetchQuery(_query2, {
-    id: fid,
-  });
-
-  const socials = results2.Socials.Social;
-  const newAddress = socials[0].userAssociatedAddresses[1];
-
-  if (data1 != null && !data1?.[0]?.isFollowing) {
-    return new NextResponse(
-      _html(notFollowing, "🚩 Retry", "post", `${URL}`)
-    );
-  }
 
   const fetchDataTotalStreams = await fetch(`${URL}/totalYoinked`);
   const fetchDataTotalStreamsJson = await fetchDataTotalStreams.json();

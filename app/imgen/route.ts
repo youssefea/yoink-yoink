@@ -2,6 +2,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import sharp from 'sharp';
 import { URL } from '../../constants'
+import { unstable_noStore as noStore } from "next/cache";
 
 async function loadSVG() {
   try {
@@ -12,10 +13,21 @@ async function loadSVG() {
     console.error('Error fetching SVG:', error);
   }
 }
+
+const imgUrl="https://i.imgur.com/pmPMJAx.png";
+
+async function toBase64ImageUrl(imgUrl: string): Promise<string> {
+  const fetchImageUrl = await fetch(imgUrl)
+  const responseArrBuffer = await fetchImageUrl.arrayBuffer()
+  const toBase64 = 
+    `data:${ fetchImageUrl.headers.get('Content-Type') || 'image/png' };base64,${Buffer.from(responseArrBuffer).toString('base64')}`
+  return toBase64
+}
 // Helper function to create an SVG with text
 async function generateSVG(text: string, color: string[], backgroundColor: string, size: string[]) {
     // Load SVG logo
     const logo= await loadSVG();
+    const bgImg=await toBase64ImageUrl(imgUrl);
     // Split text into lines
     const lines = text.split('_'); // Assuming you use _ to indicate new lines in your text input
     const lineHeight = 18; // Adjust line height as needed
@@ -30,7 +42,7 @@ async function generateSVG(text: string, color: string[], backgroundColor: strin
           y="${startingY + index * lineHeight}" 
           dominant-baseline="middle" 
           text-anchor="middle" 
-          font-family="Helvetica" 
+          font-family="Caveat" 
           font-size="${size[index] || 10}" 
           fill="${fillColor}"
       >
@@ -44,16 +56,16 @@ async function generateSVG(text: string, color: string[], backgroundColor: strin
     // SVG template with text and simple styling, including logo transformation
     return `
       <svg width="191" height="100" viewBox="0 0 191 100" xmlns="http://www.w3.org/2000/svg">
-        <rect width="100%" height="100%" fill="${backgroundColor}" />
+      <image href="${bgImg}" width="100%" height="100%"/>
         ${textSVG}
-        <g transform="translate(70, 85) scale(0.35)">
-          ${logo}
-        </g>
       </svg>
     `;
   }
 
   export async function GET(request: NextRequest) {
+
+    noStore();
+
     const { searchParams } = request.nextUrl;
     const text = searchParams.get('text') || 'Default Text';
     const color = searchParams.get('color')?.split(",") || new Array(10).fill('black');

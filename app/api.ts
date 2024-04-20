@@ -8,7 +8,7 @@ const URL =
 
 const tokenAddress=process.env.SUPER_TOKEN_ADDRESS;
 
-const subgraphURL = "https://base-mainnet.subgraph.x.superfluid.dev/";
+const subgraphURL = "https://degenchain.subgraph.x.superfluid.dev/";
 
 export const followingQuery = (id) => `
 query isFollowing {
@@ -125,11 +125,9 @@ export async function fetchSubgraphData(myQuery) {
 }
 
 
-// sender.ts - Example of sending data from another TypeScript file
-// Use this line if you're in Node.js and have installed node-fetch
 
 export async function updateProfileData(profileHandle: string, address: string) {
-  const url = `${URL}/currentYoinkerPost`; // Replace with your actual API endpoint
+  const url = `${URL}/currentYoinkerPost`;
   try {
     const response = await fetch(url, {
       method: 'POST',

@@ -4,7 +4,7 @@ import { URL } from '../constants'
 
 const myString = `_StreamYoink!_Click to yoink the stream _Earn $YOINK every second`;
 const myStringEncoded = encodeURIComponent(myString);
-const image = "https://i.imgur.com/7vstmmA.png";
+const image = "https://i.imgur.com/OayeAGm.png";
 const buttonText1 = '🚩 $YOINK'
 const buttonText2 = '🏆 Go to Leaderboard'
 

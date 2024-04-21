@@ -24,6 +24,7 @@ const tokenAddress = process.env.SUPER_TOKEN_ADDRESS as `0x${string}`;
 
 const notFollowing = `https://i.imgur.com/V2MXezK.png`;
 const didNotRecast = `https://i.imgur.com/1cii9vh.png`;
+const messageInvalid = `https://i.imgur.com/U17WPed.png`;
 
 const welcomeString = (yoinker, totalLeft) =>
   `_${yoinker}_has the stream ! _${totalLeft} $YOINK left in the pot`;
@@ -65,6 +66,9 @@ export async function POST(req) {
 
   const frameMessage = await getFrameMessage(data);
   if (process.env.ENVIRONMENT != "local") {
+    if (!frameMessage || !frameMessage.isValid) {
+      return new NextResponse(_html(messageInvalid, "🚩 Retry", "post", `${URL}`));
+    }
     if (!frameMessage.recastedCast) {
       return new NextResponse(
         _html(didNotRecast, "🚩 Retry", "post", `${URL}`)

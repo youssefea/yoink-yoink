@@ -11,6 +11,7 @@ import { init, fetchQuery } from "@airstack/node";
 import { account, walletClient, publicClient } from "./config";
 import ABI from "./abi.json";
 import {URL} from "./../../constants"
+import { getFrameMessage } from "frames.js";
 
 // USDC contract address on Base
 const contractAddress = "0x053CD976a539cC885Dd141BE360635Fe9D259714";
@@ -21,6 +22,8 @@ init(process.env.AIRSTACK_KEY || "");
 const noConnectedString = "https://i.imgur.com/rJ117At.png";
 
 const reyoinkedString ="https://i.imgur.com/QllMs7k.png";
+
+const messageInvalid = `https://i.imgur.com/U17WPed.png`;
 
 //const flowRate = 327245050000000000;
 const flowRate = 100000000000000000;
@@ -65,6 +68,13 @@ export async function POST(req) {
 
   const { untrustedData } = data;
   const { fid } = untrustedData;
+
+  const frameMessage = await getFrameMessage(data);
+  if (process.env.ENVIRONMENT != "local") {
+    if (!frameMessage || !frameMessage.isValid) {
+      return new NextResponse(_html(messageInvalid, "🚩 Retry", "post", `${URL}`));
+    }
+  }
 
   const _query2 = walletQuery(fid);
   const { data: results2 } = await fetchQuery(_query2, {

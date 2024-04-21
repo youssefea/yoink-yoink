@@ -89,7 +89,7 @@ export async function POST(req) {
 
   return new NextResponse(
     _html(
-      getImgUrl(welcomeString(currentYoinker, totalLeft.toFixed(0))),
+      "https://i.imgur.com/ZIfVSfC.png",
       "🚩YOINK",
       "post",
       `${URL}/check`

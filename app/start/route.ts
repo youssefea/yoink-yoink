@@ -23,7 +23,7 @@ init(process.env.AIRSTACK_KEY || "");
 const tokenAddress = process.env.SUPER_TOKEN_ADDRESS as `0x${string}`;
 
 const notFollowing = `https://i.imgur.com/V2MXezK.png`;
-const didNotRecast = `https://i.imgur.com/1cii9vh.png`;
+const didNotRecast = `https://i.imgur.com/PyyC6KC.png`;
 const messageInvalid = `https://i.imgur.com/U17WPed.png`;
 
 const welcomeString = (yoinker, totalLeft) =>
@@ -69,7 +69,7 @@ export async function POST(req) {
     if (!frameMessage || !frameMessage.isValid) {
       return new NextResponse(_html(messageInvalid, "🚩 Retry", "post", `${URL}`));
     }
-    if (!frameMessage.recastedCast) {
+    if (!frameMessage.recastedCast || !frameMessage.requesterFollowsCaster) {
       return new NextResponse(
         _html(didNotRecast, "🚩 Retry", "post", `${URL}`)
       );

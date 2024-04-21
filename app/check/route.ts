@@ -96,7 +96,7 @@ export async function POST(req) {
       return new NextResponse(
         _html(
           reyoinkedString,
-          "🎩 Retry",
+          "🚩 Retry",
           "post",
           `${URL}`
         )

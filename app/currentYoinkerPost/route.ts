@@ -51,7 +51,10 @@ export async function POST(request: NextRequest) {
         0
       );
     }
-    await kv.hset("balances", { oldYoinker: totalStreamed });
+    await kv.zadd(
+      'sortedBalances',
+      { score: totalStreamed, member: oldYoinker },
+    );
 
     // Update the new yoinker
     await kv.hset("currentYoinker", {

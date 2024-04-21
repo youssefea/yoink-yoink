@@ -26,8 +26,6 @@ async function toBase64ImageUrl(imgUrl: string): Promise<string> {
 // Helper function to create an SVG with text
 async function generateSVG(text: string, color: string[], backgroundColor: string, size: string[]) {
     // Load SVG logo
-    const logo= await loadSVG();
-    const bgImg=await toBase64ImageUrl(imgUrl);
     // Split text into lines
     const lines = text.split('_'); // Assuming you use _ to indicate new lines in your text input
     const lineHeight = 18; // Adjust line height as needed
@@ -56,7 +54,6 @@ async function generateSVG(text: string, color: string[], backgroundColor: strin
     // SVG template with text and simple styling, including logo transformation
     return `
       <svg width="191" height="100" viewBox="0 0 191 100" xmlns="http://www.w3.org/2000/svg">
-      <image href="${bgImg}" width="100%" height="100%"/>
         ${textSVG}
       </svg>
     `;

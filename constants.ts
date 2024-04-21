@@ -1,2 +1,2 @@
 export const URL = process.env.ENVIRONMENT === 'local' ?
-  process.env.LOCALHOST : process.env.PROD_URL
+  "localhost:3000" : "https://yoink.club"

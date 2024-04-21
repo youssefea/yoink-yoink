@@ -10,16 +10,25 @@ const buttonText2 = '🏆 Go to Leaderboard'
 
 export default function Home() {
   return (
-    <div>
-      <a href="https://superfluid.finance" target="_blank" rel="no-opener">
-      <img
-        src={image}
-        width={400}
-        height={400}
-        alt='Hello world.'
-      />
+  <div className="flex flex-col items-center justify-center h-screen">
+    <div className="mb-auto mt-2">welcome degen</div>
+    <h1 className="text-9xl font-bold mb-8">
+      🚩 $YOINK
+    </h1>
+    <a href={`${URL}/leaderboard`} className="text-2xl hover:text-blue-700 underline mb-20">
+      Leaderboard
+    </a>
+    <div className="mt-auto w-auto text-center mb-2">
+      <a 
+        href="https://explorer.degen.tips/token/0x25c2Afe6249271BDB03eF1090F8e084e296C26c2" 
+        className="text-2xl text-gray-600 hover:text-blue-800"
+      >
+        View on Explorer - add to metamask
       </a>
+      <p>21M capped supply - basically deflationary - 5% airdropped, 95% yoinkable</p>
+      <p className='text-xs'>Superfluid tokens are too magic for explorer. Add to metamask to check your balance</p>
     </div>
+  </div>
   );
 }
 

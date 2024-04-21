@@ -11,13 +11,15 @@ const buttonText2 = '🏆 Go to Leaderboard'
 export default function Home() {
   return (
   <div className="flex flex-col items-center justify-center h-screen">
-    <div className="mb-auto mt-2">welcome degen</div>
-    <h1 className="text-9xl font-bold mb-8">
-      🚩 $YOINK
-    </h1>
-    <a href={`${URL}/leaderboard`} className="text-2xl hover:text-blue-700 underline mb-20">
-      Leaderboard
-    </a>
+    <div className="mb-auto mt-2 w-full text-center">welcome degen</div>
+    <div className='text-center'>
+      <h1 className="text-6xl md:text-9xl font-bold italic mb-2">
+        🚩 $YOINK
+      </h1>
+      <a href={`${URL}/leaderboard`} className="text-2xl hover:text-blue-700 underline mb-20">
+        Leaderboard
+      </a>
+    </div>
     <div className="mt-auto w-auto text-center mb-2">
       <a 
         href="https://explorer.degen.tips/token/0x25c2Afe6249271BDB03eF1090F8e084e296C26c2" 

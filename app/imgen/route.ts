@@ -42,7 +42,7 @@ async function generateSVG(text: string, color: string[], backgroundColor: strin
           y="${startingY + index * lineHeight}" 
           dominant-baseline="middle" 
           text-anchor="middle" 
-          font-family="Caveat" 
+          font-family="Arial" 
           font-size="${size[index] || 10}" 
           fill="${fillColor}"
       >

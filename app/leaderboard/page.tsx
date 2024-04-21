@@ -118,11 +118,7 @@ export default function LeaderboardPage() {
           </a>
         </div>
       )}
-      <h1
-          style={{ color: "red", fontSize: "2em", marginBottom: "0.5em" }}
-        >
-          Leaderboard under construction 🚧. Coming soon...
-        </h1>
+     
       <table
         style={{
           borderCollapse: "collapse",

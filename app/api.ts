@@ -8,7 +8,7 @@ const URL =
 
 const tokenAddress=process.env.SUPER_TOKEN_ADDRESS;
 
-const subgraphURL = "https://degenchain.subgraph.x.superfluid.dev/";
+const subgraphURL = "https://subgraph.airstack.xyz/query/subgraphs/name/protocol-v1-degenchain";
 
 export const followingQuery = (id) => `
 query isFollowing {
@@ -102,11 +102,15 @@ export async function fetchSubgraphData(myQuery) {
     query: myQuery,
   };
 
+  // Accessing the token from environment variables
+  const token = process.env.BEARER_TOKEN;
+
   try {
     const response = await fetch(subgraphURL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`  // Adding the Authorization header
       },
       body: JSON.stringify(requestData),
     });
@@ -124,6 +128,7 @@ export async function fetchSubgraphData(myQuery) {
     throw error; // Rethrow or handle as needed
   }
 }
+
 
 
 

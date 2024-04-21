@@ -83,7 +83,7 @@ export default function LeaderboardPage() {
         </h1>
       </a>
       <p style={{ textAlign: "center", lineHeight: "1.5" }}>
-        A game-in-a-frame made by the{" "}
+        A memecoin and game-in-a-frame powered by {" "}
         <a
           href="https://warpcast.com/superfluid"
           target="_blank"
@@ -92,7 +92,7 @@ export default function LeaderboardPage() {
         >
           Superfluid
         </a>{" "}
-        team.
+        .
         <br />
         Play{" "}
         <a
@@ -233,6 +233,16 @@ export default function LeaderboardPage() {
             📖 Github Repo Link
           </a>
         </p>
+        <p style={{ textAlign: "center", lineHeight: "1.5" }}>
+          <a
+            href="https://explorer.degen.tips/token/0x25c2Afe6249271BDB03eF1090F8e084e296C26c2"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: "#007bff", textDecoration: "none" }}
+          >
+            $YOINK Token Address
+          </a>
+        </p>
         <p>
           Inspired by{" "}
           <a
@@ -249,15 +259,7 @@ export default function LeaderboardPage() {
             rel="noopener noreferrer"
           >
             @horsefacts.eth
-          </a>
-          ) and made by{" "}
-          <a
-            href="https://warpcast.com/youssea"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            @youssea
-          </a>
+          </a>)
         </p>
       </div>
     </div>

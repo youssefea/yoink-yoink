@@ -79,12 +79,6 @@ export async function POST(req) {
 
   const totalLeft = Number(formatEther(balanceOfAccount));
   console.log(totalLeft);
-
-  if (totalLeft <= minBalance) {
-    return new NextResponse(
-      _html(getImgUrl(gameEnded), "🚩 Retry", "post", `${URL}/`)
-    );
-  }
   
 
   return new NextResponse(

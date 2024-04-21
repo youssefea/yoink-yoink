@@ -77,7 +77,7 @@ export async function POST(req) {
 
   if (!newAddress) {
     return new NextResponse(
-      _html(noConnectedString, "🎩 Retry", "post", `${URL}`)
+      _html(noConnectedString, "🚩 Retry", "post", `${URL}`)
     );
   }
 

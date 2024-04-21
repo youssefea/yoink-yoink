@@ -69,7 +69,7 @@ export async function POST(req) {
     if (!frameMessage || !frameMessage.isValid) {
       return new NextResponse(_html(messageInvalid, "🚩 Retry", "post", `${URL}`));
     }
-    if (!frameMessage.recastedCast || !frameMessage.requesterFollowsCaster) {
+    if (!frameMessage.recastedCast) {
       return new NextResponse(
         _html(didNotRecast, "🚩 Retry", "post", `${URL}`)
       );

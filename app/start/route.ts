@@ -19,7 +19,7 @@ import {URL} from "./../../constants"
 
 init(process.env.AIRSTACK_KEY || "");
 
-const USDCxAddress = process.env.SUPER_TOKEN_ADDRESS as `0x${string}`;
+const tokenAddress = process.env.SUPER_TOKEN_ADDRESS as `0x${string}`;
 
 const notFollowing = `https://i.imgur.com/V2MXezK.png`;
 
@@ -71,13 +71,14 @@ export async function POST(req) {
   const currentYoinker = fetchDataCurrentYoinkerJson.profileHandle;
 
   const balanceOfAccount: any = await publicClient.readContract({
-    address: USDCxAddress,
+    address: tokenAddress,
     abi: ERC20ABI,
     functionName: "balanceOf",
     args: [account.address],
   });
 
   const totalLeft = Number(formatEther(balanceOfAccount));
+  console.log(totalLeft);
 
   if (totalLeft <= minBalance) {
     return new NextResponse(

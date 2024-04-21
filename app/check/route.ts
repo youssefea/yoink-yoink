@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { kv } from "@vercel/kv";
 import {
   followingQuery,
   walletQuery,
@@ -12,19 +13,19 @@ import ABI from "./abi.json";
 import {URL} from "./../../constants"
 
 // USDC contract address on Base
-const contractAddress = "0xcfA132E353cB4E398080B9700609bb008eceB125";
+const contractAddress = "0x053CD976a539cC885Dd141BE360635Fe9D259714";
 const superTokenAddress = process.env.SUPER_TOKEN_ADDRESS as `0x${string}`;
 
 init(process.env.AIRSTACK_KEY || "");
 
 const noConnectedString = "https://i.imgur.com/rJ117At.png";
 
-const reyoinkedString ="https://i.imgur.com/DvbVpZ1.png";
+const reyoinkedString ="https://i.imgur.com/QllMs7k.png";
 
 //const flowRate = 327245050000000000;
 const flowRate = 32724505;
 
-const coolDown = 3600;
+const coolDown = 600;
 
 const _html = (img, msg, action, url) => `
 <!DOCTYPE html>
@@ -58,6 +59,7 @@ async function yoink(_to, _flowRate){
   });
 }
 
+
 export async function POST(req) {
   const data = await req.json();
 
@@ -79,12 +81,10 @@ export async function POST(req) {
     );
   }
 
-  const _query3 = lastYoinkedQuery(newAddress);
-  const result3: any = await fetchSubgraphData(_query3);
-  const lastYoink =
-    result3.data.account.outflows[0] == null
-      ? 0
-      : result3.data.account.outflows[0].updatedAtTimestamp;
+  let lastYoink = await kv.hget("timestamps", userHandle);
+  if (!lastYoink) {
+    lastYoink = 0;
+  }
   const now = Math.floor(Date.now() / 1000);
 
   const fetchData = await fetch(`${URL}/currentYoinkerApi`);
@@ -103,11 +103,11 @@ export async function POST(req) {
       );
     }
 
-    await yoink(newAddress, flowRate);
+    yoink(newAddress, flowRate);
   } else if (currentYoinkerAddress.toLowerCase() == newAddress.toLowerCase()) {
     return new NextResponse(
       _html(
-        "https://i.imgur.com/97KatI6.gif",
+        "https://i.imgur.com/o54tvZD.gif",
         "See in Dashboard 🌊",
         "link",
         `https://app.superfluid.finance/?view=${newAddress}`
@@ -115,11 +115,11 @@ export async function POST(req) {
     );
   }
 
-  await updateProfileData(userHandle, newAddress);
+  await updateProfileData(userHandle, newAddress, now);
 
   return new NextResponse(
     _html(
-      "https://i.imgur.com/97KatI6.gif",
+      "https://i.imgur.com/o54tvZD.gif",
       "See in Dashboard 🌊",
       "link",
       `https://app.superfluid.finance/?view=${newAddress}`

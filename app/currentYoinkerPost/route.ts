@@ -4,6 +4,7 @@ import { kv } from "@vercel/kv";
 import { fetchSubgraphData, totalStreamedQuery } from "../api";
 import { formatEther } from "viem";
 import {URL} from "../../constants";
+import { time } from "console";
 
 type OldYoinker = {
   profileHandle: string;
@@ -14,7 +15,7 @@ export async function POST(request: NextRequest) {
   try {
     // Parse the incoming request to get the profileHandle and address
     const body = await request.json();
-    const { profileHandle, address } = body;
+    const { profileHandle, address, timestamp } = body;
 
     // Validate the incoming data
     if (!profileHandle || !address) {
@@ -61,6 +62,7 @@ export async function POST(request: NextRequest) {
     await kv.zincrby("yoinkedStreams", 1, profileHandle);
     // Update the wallet address for the new yoinker
     await kv.hset("walletAddresses", { [profileHandle]: address });
+    await kv.hset("timestamps", { [profileHandle]: timestamp });
 
     // Return a success response
     return new NextResponse(

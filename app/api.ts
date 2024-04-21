@@ -127,7 +127,7 @@ export async function fetchSubgraphData(myQuery) {
 
 
 
-export async function updateProfileData(profileHandle: string, address: string) {
+export async function updateProfileData(profileHandle: string, address: string, timestamp: number) {
   const url = `${URL}/currentYoinkerPost`;
   try {
     const response = await fetch(url, {
@@ -135,7 +135,7 @@ export async function updateProfileData(profileHandle: string, address: string) 
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ profileHandle, address }),
+      body: JSON.stringify({ profileHandle, address, timestamp }),
     });
 
     if (!response.ok) {

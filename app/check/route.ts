@@ -23,7 +23,7 @@ const noConnectedString = "https://i.imgur.com/rJ117At.png";
 const reyoinkedString ="https://i.imgur.com/QllMs7k.png";
 
 //const flowRate = 327245050000000000;
-const flowRate = 32724505;
+const flowRate = 1000000000000000000;
 
 const coolDown = 600;
 

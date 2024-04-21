@@ -18,6 +18,8 @@ const superfluidLogo = `<path fill-rule="evenodd" clip-rule="evenodd" d="M62.415
 <path fill-rule="evenodd" clip-rule="evenodd" d="M30.6978 23.5061H23.4586V16.2669H16.2192V9.0275H30.6978V23.5061ZM8.98 30.7453H16.2192V23.5061H8.98V30.7453ZM0 4.38417V35.3892C0 37.7839 1.94139 39.7256 4.33639 39.7256H35.3414C37.7364 39.7256 39.6778 37.7839 39.6778 35.3892V4.38417C39.6778 1.98917 37.7364 0.0477791 35.3414 0.0477791H4.33639C1.94139 0.0477791 0 1.98917 0 4.38417Z" fill="#12141E"/>
 `;
 
+const bgImg="https://i.imgur.com/wL67NRV.png"
+
 function generateSVG(
   userName: string,
   initialBalance: number,
@@ -33,7 +35,7 @@ function generateSVG(
     const balance = initialBalance + stepValue * i;
     const balanceStr = balance.toFixed(4); // Keep 7 decimal places
     texts += `
-            <text x="50%" y="80%" fill="black" font-size="${fontSize}px" font-family="Arial" text-anchor="middle" visibility="hidden">
+            <text x="50%" y="60%" fill="black" font-size="${fontSize}px" font-family="Caveat" text-anchor="middle" visibility="hidden">
                 ${balanceStr}
                 <set attributeName="visibility" to="visible" begin="${
                   i * duration
@@ -41,7 +43,7 @@ function generateSVG(
                 <set attributeName="visibility" to="hidden" begin="${
                   (i + 1) * duration
                 }s" dur="${duration}s" repeatCount="indefinite"/>
-                🎩 $DEGEN
+                🚩 $YOINK
             </text>
         `;
   }
@@ -52,21 +54,8 @@ function generateSVG(
 
   return `
         <svg width="191" height="100" viewBox="0 0 191 100" xmlns="http://www.w3.org/2000/svg">
-            <rect width="100%" height="100%" fill="white"/>
-            <text x="50%" y="40" fill="#1DB227" font-size="24px" font-family="Caveat" text-anchor="middle">
-                ${userName}
-            </text>
-            <text x="50%" y="55" fill="black" font-size="8px" font-family="Caveat" text-anchor="middle">
-                ${alreadyTxt}
-            </text>
-            <text x="50%" y="70" fill="black" font-size="8px" font-family="Caveat" text-anchor="middle">
-                Your balance:
-            </text>
-            ${texts}
-
-            <g transform="translate(70, 85) scale(0.35)">
-            ${superfluidLogo}
-            </g>
+        <image href="${bgImg}" width="100%" height="100%"/>
+        ${texts}
             
         </svg>
     `;

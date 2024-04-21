@@ -39,6 +39,7 @@ query GetAddressesOfFarcasters {
   Socials(input: {filter: {userId: {_eq: "${id}"}}, blockchain: ethereum}) {
     Social {
       userAssociatedAddresses
+      profileName
     }
   }
 }

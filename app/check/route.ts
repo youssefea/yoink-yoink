@@ -17,11 +17,12 @@ const superTokenAddress = process.env.SUPER_TOKEN_ADDRESS as `0x${string}`;
 
 init(process.env.AIRSTACK_KEY || "");
 
-const noConnectedString = "https://i.imgur.com/GBYJbwP.png";
+const noConnectedString = "https://i.imgur.com/rJ117At.png";
 
-const reyoinkedString ="https://i.imgur.com/jfySrCh.png";
+const reyoinkedString ="https://i.imgur.com/DvbVpZ1.png";
 
-const flowRate = 327245050000000000;
+//const flowRate = 327245050000000000;
+const flowRate = 32724505;
 
 const coolDown = 3600;
 
@@ -45,26 +46,15 @@ const _html = (img, msg, action, url) => `
 </html>
 `;
 
-// TODO: these should be changed to the function in the contract
-async function deleteFlow(_from, _to, _nonce){
-  await walletClient.writeContract({
-    address: contractAddress,
-    abi: ABI,
-    functionName: "deleteFlow",
-    account,
-    nonce: _nonce,
-    args: [superTokenAddress, _from, _to, "0x0"],
-  });
-}
 
-async function setFlowrate(_to, _nonce){
+
+async function yoink(_to, _flowRate){
   await walletClient.writeContract({
     address: contractAddress,
     abi: ABI,
-    functionName: "setFlowrate",
+    functionName: "yoink",
     account,
-    nonce: _nonce,
-    args: [superTokenAddress, _to, flowRate],
+    args: [_to, _flowRate],
   });
 }
 
@@ -74,11 +64,6 @@ export async function POST(req) {
   const { untrustedData } = data;
   const { fid } = untrustedData;
 
-  const _query = followingQuery(fid);
-  const { data: results } = await fetchQuery(_query, {
-    id: fid,
-  });
-
   const _query2 = walletQuery(fid);
   const { data: results2 } = await fetchQuery(_query2, {
     id: fid,
@@ -86,9 +71,7 @@ export async function POST(req) {
 
   const socials = results2.Socials.Social;
   const newAddress = socials[0].userAssociatedAddresses[1];
-  const userHandle =
-    results.Wallet.socialFollowers.Follower[0].followerAddress.socials[0]
-      .profileHandle;
+  const userHandle =socials[0].profileName;
 
   if (!newAddress) {
     return new NextResponse(
@@ -119,31 +102,12 @@ export async function POST(req) {
         )
       );
     }
-    let nonce = await publicClient.getTransactionCount({  
-      address: account.address,
-    })
 
-    if (currentYoinkerAddress != null) {
-      const receiverCurrentFlowRate = await publicClient.readContract({
-        address: contractAddress,
-        abi: ABI,
-        functionName: "getFlowrate",
-        args: [superTokenAddress, account.address, currentYoinkerAddress],
-      });
-
-      if (Number(receiverCurrentFlowRate) > 0) {
-        deleteFlow(account.address, currentYoinkerAddress, nonce);
-        
-        nonce++;
-      }
-    }
-    setFlowrate(newAddress, nonce);
-    const delay = ms => new Promise(res => setTimeout(res, ms));
-    await delay(1000);
+    await yoink(newAddress, flowRate);
   } else if (currentYoinkerAddress.toLowerCase() == newAddress.toLowerCase()) {
     return new NextResponse(
       _html(
-        "https://i.imgur.com/NZRglCI.gif",
+        "https://i.imgur.com/97KatI6.gif",
         "See in Dashboard 🌊",
         "link",
         `https://app.superfluid.finance/?view=${newAddress}`
@@ -155,7 +119,7 @@ export async function POST(req) {
 
   return new NextResponse(
     _html(
-      "https://i.imgur.com/NZRglCI.gif",
+      "https://i.imgur.com/97KatI6.gif",
       "See in Dashboard 🌊",
       "link",
       `https://app.superfluid.finance/?view=${newAddress}`

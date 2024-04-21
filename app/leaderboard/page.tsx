@@ -77,7 +77,7 @@ export default function LeaderboardPage() {
         style={{ textDecoration: "none" }}
       >
         <h1
-          style={{ color: "#1DB227", fontSize: "3em", marginBottom: "0.5em" }}
+          style={{ color: "Red", fontSize: "3em", marginBottom: "0.5em" }}
         >
           StreamYoink!
         </h1>
@@ -103,7 +103,7 @@ export default function LeaderboardPage() {
         >
           StreamYoink
         </a>{" "}
-        now and start earning 🎩$YOINK every second.
+        now and start earning 🚩$YOINK every second.
         <br/>
         The Stream has now been yoinked {totalYoinked} times.
       </p>
@@ -118,6 +118,11 @@ export default function LeaderboardPage() {
           </a>
         </div>
       )}
+      <h1
+          style={{ color: "red", fontSize: "2em", marginBottom: "0.5em" }}
+        >
+          Leaderboard under construction 🚧. Coming soon...
+        </h1>
       <table
         style={{
           borderCollapse: "collapse",

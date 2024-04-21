@@ -16,7 +16,7 @@ import {
   CheckIsFollowingFarcasterUserInput,
   CheckIsFollowingFarcasterUserOutput,
 } from "@airstack/frames";
-import {URL} from "./../../constants"
+import { URL } from "./../../constants";
 
 init(process.env.AIRSTACK_KEY || "");
 
@@ -64,8 +64,12 @@ export async function POST(req) {
   const { fid } = untrustedData;
 
   const frameMessage = await getFrameMessage(data);
-  if (!frameMessage.recastedCast) {
-    return new NextResponse(_html(didNotRecast, "🚩 Retry", "post", `${URL}`));
+  if (process.env.ENVIRONMENT != "local") {
+    if (!frameMessage.recastedCast) {
+      return new NextResponse(
+        _html(didNotRecast, "🚩 Retry", "post", `${URL}`)
+      );
+    }
   }
 
   const fetchDataTotalStreams = await fetch(`${URL}/totalYoinked`);
@@ -84,15 +88,9 @@ export async function POST(req) {
 
   const totalLeft = Number(formatEther(balanceOfAccount));
   console.log(totalLeft);
-  
 
   return new NextResponse(
-    _html(
-      "https://i.imgur.com/ZIfVSfC.png",
-      "🚩YOINK",
-      "post",
-      `${URL}/check`
-    )
+    _html("https://i.imgur.com/ZIfVSfC.png", "🚩YOINK", "post", `${URL}/check`)
   );
 }
 

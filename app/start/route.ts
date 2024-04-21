@@ -9,6 +9,7 @@ import { init, fetchQuery } from "@airstack/node";
 import { account, walletClient, publicClient } from "./config";
 import ERC20ABI from "./erc20abi.json";
 import { formatEther } from "viem";
+import { getFrameMessage } from "frames.js";
 
 import {
   checkIsFollowingFarcasterUser,
@@ -22,6 +23,7 @@ init(process.env.AIRSTACK_KEY || "");
 const tokenAddress = process.env.SUPER_TOKEN_ADDRESS as `0x${string}`;
 
 const notFollowing = `https://i.imgur.com/V2MXezK.png`;
+const didNotRecast = `https://i.imgur.com/1cii9vh.png`;
 
 const welcomeString = (yoinker, totalLeft) =>
   `_${yoinker}_has the stream ! _${totalLeft} $YOINK left in the pot`;
@@ -61,7 +63,10 @@ export async function POST(req) {
   const { untrustedData } = data;
   const { fid } = untrustedData;
 
-
+  const frameMessage = await getFrameMessage(data);
+  if (!frameMessage.recastedCast) {
+    return new NextResponse(_html(didNotRecast, "🚩 Retry", "post", `${URL}`));
+  }
 
   const fetchDataTotalStreams = await fetch(`${URL}/totalYoinked`);
   const fetchDataTotalStreamsJson = await fetchDataTotalStreams.json();

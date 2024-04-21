@@ -86,7 +86,7 @@ query GetLastYoinked {
 
 export const totalStreamedQuery = (receiverAddress) => `
 query totalStreamed {
-  accountTokenSnapshots(where: {account: "${account.address.toLowerCase()}"}) {
+  accountTokenSnapshots(where: {account: "${account.address.toLowerCase()}", token: ${tokenAddress}) {
     account {
       outflows(where: {receiver: "${receiverAddress.toLowerCase()}"}) {
         streamedUntilUpdatedAt

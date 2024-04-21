@@ -41,8 +41,7 @@ async function generateSVG(text: string, color: string[], backgroundColor: strin
           x="50%" 
           y="${startingY + index * lineHeight}" 
           dominant-baseline="middle" 
-          text-anchor="middle" 
-          font-family="Arial" 
+          text-anchor="middle"
           font-size="${size[index] || 10}" 
           fill="${fillColor}"
       >

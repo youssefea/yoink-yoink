@@ -63,7 +63,6 @@ export async function GET(req) {
       status: 200,
       headers: {
         "Content-Type": "application/json",
-        "Cache-Control": "public, max-age=30",
       },
     });
   } catch (error) {
@@ -79,3 +78,4 @@ export async function GET(req) {
     );
   }
 }
+export const revalidate = 30;

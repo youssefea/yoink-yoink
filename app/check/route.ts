@@ -3,7 +3,7 @@ import { kv } from "@vercel/kv";
 import {
   followingQuery,
   walletQuery,
-  lastYoinkedQuery,
+  totalStreamedQueryByTimestamp,
   fetchSubgraphData,
   updateProfileData,
 } from "../api";
@@ -24,6 +24,8 @@ const noConnectedString = "https://i.imgur.com/rJ117At.png";
 const reyoinkedString ="https://i.imgur.com/QllMs7k.png";
 
 const messageInvalid = `https://i.imgur.com/U17WPed.png`;
+
+const exceededYoinksPerDay = `https://i.imgur.com/PTlmhWw.png`;
 
 //const flowRate = 327245050000000000;
 const flowRate = 100000000000000000;
@@ -100,6 +102,23 @@ export async function POST(req) {
   const fetchData = await fetch(`${URL}/currentYoinkerApi`);
   const fetchDataJson = await fetchData.json();
   const currentYoinkerAddress = fetchDataJson.address;
+
+  const subgraphResponse: any = await fetchSubgraphData(
+    totalStreamedQueryByTimestamp(newAddress, (now-86400).toString())
+  );
+  const outflows =
+    subgraphResponse?.data?.accountTokenSnapshots?.[0]?.account?.outflows;
+
+  if (outflows && outflows.length > 30) {
+    return new NextResponse(
+      _html(
+        exceededYoinksPerDay,
+        "🚩 Retry",
+        "post",
+        `${URL}`
+      )
+    );
+  }
 
   if (currentYoinkerAddress.toLowerCase() != newAddress.toLowerCase()) {
     if (Number(lastYoink) + coolDown > now) {

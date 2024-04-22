@@ -95,6 +95,17 @@ query totalStreamed {
   }
 }
 `
+export const totalStreamedQueryByTimestamp = (receiverAddress,timestamp) => `
+query totalStreamed {
+  accountTokenSnapshots(where: {account: "${account.address.toLowerCase()}", token: "${tokenAddress?.toLocaleLowerCase()}"}) {
+    account {
+      outflows(where: {receiver: "${receiverAddress.toLowerCase()}", createdAtTimestamp_gt: "${timestamp}"}) {
+        streamedUntilUpdatedAt
+      }
+    }
+  }
+}
+`
 
 // Function to perform the POST request and handle the response
 export async function fetchSubgraphData(myQuery) {

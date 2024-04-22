@@ -38,10 +38,8 @@ export async function POST(request: NextRequest) {
     const subgraphResponse: any = await fetchSubgraphData(
       totalStreamedQuery(oldAddress)
     );
-    console.log(subgraphResponse);
     const outflows =
       subgraphResponse?.data?.accountTokenSnapshots?.[0]?.account?.outflows;
-    console.log(outflows);
     let totalStreamed;
     if (!outflows) {
       console.error(`No outflows found for ${oldYoinker}`);

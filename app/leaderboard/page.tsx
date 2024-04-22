@@ -85,7 +85,7 @@ export default function LeaderboardPage() {
       <p style={{ textAlign: "center", lineHeight: "1.5" }}>
         A memecoin and game-in-a-frame powered by {" "}
         <a
-          href="https://www.yoink.club/"
+          href="https://www.superfluid.finance/"
           target="_blank"
           rel="noopener noreferrer"
           style={{ color: "#007bff", textDecoration: "none" }}

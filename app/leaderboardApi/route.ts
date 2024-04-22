@@ -10,6 +10,7 @@ import { formatEther } from "viem";
 init(process.env.AIRSTACK_KEY || "");
 
 export async function GET(req) {
+  noStore();
   try {
     // Fetch the sorted leaderboard data by balances directly from KV
     const leaderboardDataRaw: any = await kv.zrange(

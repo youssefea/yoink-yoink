@@ -79,3 +79,4 @@ export async function GET(req) {
   }
 }
 export const revalidate = 30;
+export const maxDuration = 60;

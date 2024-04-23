@@ -5,6 +5,7 @@ type LeaderboardEntry = {
   userHandle: string;
   score: number; // You might want to rename or remove this if it's no longer relevant
   totalStreamed: number; // Total $YOINK streamed
+  walletAddress: string;
 };
 
 type CurrentYoinker = {
@@ -24,7 +25,7 @@ export default function LeaderboardPage() {
 
         // Fetch leaderboard data
         const leaderboardResponse = await fetch("/leaderboardApi");
-        const leaderboardData = await leaderboardResponse.json();
+        const leaderboardData: LeaderboardEntry[] = await leaderboardResponse.json();
 
         // Update state with received data, no need for sorting
         setLeaderboard(leaderboardData);
@@ -165,6 +166,15 @@ export default function LeaderboardPage() {
             >
               Total $YOINK Streamed
             </th>{" "}
+            <th
+              style={{
+                border: "1px solid white",
+                textAlign: "center",
+                padding: "8px",
+              }}
+            >
+              Address
+            </th>{" "}
           </tr>
         </thead>
         <tbody>
@@ -213,6 +223,16 @@ export default function LeaderboardPage() {
               >
                 {entry.totalStreamed}
               </td>{" "}
+              <td>
+                <a
+                  href={`https://explorer.degen.tips/address/${entry.walletAddress}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ color: "#007bff", textDecoration: "none" }}
+                >
+                  {`${entry.walletAddress.substring(0, 6)}...${entry.walletAddress.substring(entry.walletAddress.length - 4)}`}
+                </a>
+              </td>
             </tr>
           ))}
         </tbody>

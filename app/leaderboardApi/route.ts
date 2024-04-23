@@ -43,7 +43,7 @@ export async function GET(req) {
           }
           const score: any = await kv.zscore("yoinkedStreams", entry.userHandle);
 
-          return { ...entry, score };
+          return { ...entry, score, walletAddress: userAddress };
         } catch (error) {
           console.error(`Error fetching data for ${entry.userHandle}:`, error);
           return { ...entry, score: 0 }; // Fallback to 0 in case of any error

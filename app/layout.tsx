@@ -6,7 +6,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "StreamYoink 🌊",
-  description: "Created by Superfluid",
+  description: "Powered by Superfluid",
 };
 
 export default function RootLayout({

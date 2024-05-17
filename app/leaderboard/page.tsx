@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 
 type LeaderboardEntry = {
   userHandle: string;
-  score: number; // You might want to rename or remove this if it's no longer relevant
-  totalStreamed: number; // Total $YOINK streamed
+  score: number;
+  totalStreamed: number;
 };
 
 type CurrentYoinker = {
@@ -16,17 +16,17 @@ export default function LeaderboardPage() {
   const [currentYoinker, setCurrentYoinker] = useState<CurrentYoinker | null>(null);
   const [totalYoinked, setTotalYoinked] = useState<number>(0);
   const [isLoading, setIsLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const pageSize = 100;
 
   useEffect(() => {
     async function fetchData() {
       try {
-        setIsLoading(true); // Start loading
+        setIsLoading(true);
 
-        // Fetch leaderboard data
-        const leaderboardResponse = await fetch("/leaderboardApi");
+        // Fetch leaderboard data with pagination
+        const leaderboardResponse = await fetch(`/leaderboardApi?page=${page}&size=${pageSize}`);
         const leaderboardData = await leaderboardResponse.json();
-
-        // Update state with received data, no need for sorting
         setLeaderboard(leaderboardData);
 
         // Fetch current yoinker data
@@ -34,19 +34,28 @@ export default function LeaderboardPage() {
         const currentYoinkerData: CurrentYoinker = await currentYoinkerResponse.json();
         setCurrentYoinker(currentYoinkerData);
 
+        // Fetch total yoinked data
         const totalYoinkedResponse = await fetch("/totalYoinked");
         const totalYoinkedData = await totalYoinkedResponse.json();
         setTotalYoinked(totalYoinkedData.totalScore);
 
-        setIsLoading(false); // End loading
+        setIsLoading(false);
       } catch (error) {
         console.error("Failed to fetch data:", error);
-        setIsLoading(false); // Ensure loading is false in case of error
+        setIsLoading(false);
       }
     }
 
     fetchData();
-  }, []);
+  }, [page]);
+
+  const handlePreviousPage = () => {
+    setPage(prevPage => Math.max(prevPage - 1, 1));
+  };
+
+  const handleNextPage = () => {
+    setPage(prevPage => prevPage + 1);
+  };
 
   if (isLoading) {
     return (
@@ -83,7 +92,7 @@ export default function LeaderboardPage() {
         </h1>
       </a>
       <p style={{ textAlign: "center", lineHeight: "1.5" }}>
-        A memecoin and game-in-a-frame powered by {" "}
+        A memecoin and game-in-a-frame powered by{" "}
         <a
           href="https://www.superfluid.finance/"
           target="_blank"
@@ -104,7 +113,7 @@ export default function LeaderboardPage() {
           StreamYoink
         </a>{" "}
         now and start earning 🚩$YOINK every second.
-        <br/>
+        <br />
         The Stream has now been yoinked {totalYoinked} times.
       </p>
       {currentYoinker && (
@@ -118,7 +127,12 @@ export default function LeaderboardPage() {
           </a>
         </div>
       )}
-     
+
+      <div style={{ display: "flex", justifyContent: "space-between", width: "80%", maxWidth: "600px", marginBottom: "20px" }}>
+        <button onClick={handlePreviousPage} style={buttonStyle} disabled={page === 1}>Previous Page</button>
+        <button onClick={handleNextPage} style={buttonStyle}>Next Page</button>
+      </div>
+
       <table
         style={{
           borderCollapse: "collapse",
@@ -164,7 +178,7 @@ export default function LeaderboardPage() {
               }}
             >
               Total $YOINK Streamed
-            </th>{" "}
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -177,7 +191,7 @@ export default function LeaderboardPage() {
                   padding: "8px",
                 }}
               >
-                {index + 1}
+                {(page - 1) * pageSize + index + 1}
               </td>
               <td
                 style={{
@@ -212,11 +226,17 @@ export default function LeaderboardPage() {
                 }}
               >
                 {entry.totalStreamed}
-              </td>{" "}
+              </td>
             </tr>
           ))}
         </tbody>
       </table>
+
+      <div style={{ display: "flex", justifyContent: "space-between", width: "80%", maxWidth: "600px", marginTop: "20px" }}>
+        <button onClick={handlePreviousPage} style={buttonStyle} disabled={page === 1}>Previous Page</button>
+        <button onClick={handleNextPage} style={buttonStyle}>Next Page</button>
+      </div>
+
       <br />
       <div>
         <p style={{ textAlign: "center", lineHeight: "1.5" }}>
@@ -261,3 +281,12 @@ export default function LeaderboardPage() {
     </div>
   );
 }
+
+const buttonStyle = {
+  backgroundColor: "#007bff",
+  color: "white",
+  padding: "10px 20px",
+  border: "none",
+  borderRadius: "5px",
+  cursor: "pointer",
+};

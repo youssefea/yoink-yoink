@@ -10,7 +10,7 @@ import {
 import { init, fetchQuery } from "@airstack/node";
 import { account, walletClient, publicClient } from "./config";
 import ABI from "./abi.json";
-import {URL} from "./../../constants"
+import { URL, DEBUGGER_HUB_URL } from "./../../constants";
 import { getFrameMessage } from "frames.js";
 
 // USDC contract address on Base
@@ -21,7 +21,7 @@ init(process.env.AIRSTACK_KEY || "");
 
 const noConnectedString = "https://i.imgur.com/rJ117At.png";
 
-const reyoinkedString ="https://i.imgur.com/QllMs7k.png";
+const reyoinkedString = "https://i.imgur.com/QllMs7k.png";
 
 const messageInvalid = `https://i.imgur.com/U17WPed.png`;
 
@@ -52,9 +52,7 @@ const _html = (img, msg, action, url) => `
 </html>
 `;
 
-
-
-async function yoink(_to, _flowRate){
+async function yoink(_to, _flowRate) {
   await walletClient.writeContract({
     address: contractAddress,
     abi: ABI,
@@ -64,18 +62,20 @@ async function yoink(_to, _flowRate){
   });
 }
 
-
 export async function POST(req) {
   const data = await req.json();
 
   const { untrustedData } = data;
   const { fid } = untrustedData;
 
-  const frameMessage = await getFrameMessage(data);
-  if (process.env.ENVIRONMENT != "local") {
-    if (!frameMessage || !frameMessage.isValid) {
-      return new NextResponse(_html(messageInvalid, "🚩 Retry", "post", `${URL}`));
-    }
+  const frameMessage = await getFrameMessage(data, {
+    hubHttpUrl: DEBUGGER_HUB_URL,
+  });
+
+  if (!frameMessage || !frameMessage.isValid) {
+    return new NextResponse(
+      _html(messageInvalid, "🚩 Retry", "post", `${URL}`)
+    );
   }
 
   const _query2 = walletQuery(fid);
@@ -85,7 +85,7 @@ export async function POST(req) {
 
   const socials = results2.Socials.Social;
   const newAddress = socials[0].userAssociatedAddresses[1];
-  const userHandle =socials[0].profileName;
+  const userHandle = socials[0].profileName;
 
   if (!newAddress) {
     return new NextResponse(
@@ -104,31 +104,21 @@ export async function POST(req) {
   const currentYoinkerAddress = fetchDataJson.address;
 
   const subgraphResponse: any = await fetchSubgraphData(
-    totalStreamedQueryByTimestamp(newAddress, (now-86400).toString())
+    totalStreamedQueryByTimestamp(newAddress, (now - 86400).toString())
   );
   const outflows =
     subgraphResponse?.data?.accountTokenSnapshots?.[0]?.account?.outflows;
 
   if (outflows && outflows.length > 30) {
     return new NextResponse(
-      _html(
-        exceededYoinksPerDay,
-        "🚩 Retry",
-        "post",
-        `${URL}`
-      )
+      _html(exceededYoinksPerDay, "🚩 Retry", "post", `${URL}`)
     );
   }
 
   if (currentYoinkerAddress.toLowerCase() != newAddress.toLowerCase()) {
     if (Number(lastYoink) + coolDown > now) {
       return new NextResponse(
-        _html(
-          reyoinkedString,
-          "🚩 Retry",
-          "post",
-          `${URL}`
-        )
+        _html(reyoinkedString, "🚩 Retry", "post", `${URL}`)
       );
     }
 

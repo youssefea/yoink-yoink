@@ -8,7 +8,7 @@ const URL =
 
 const tokenAddress=process.env.SUPER_TOKEN_ADDRESS;
 
-const subgraphURL = "https://subgraph.airstack.xyz/query/subgraphs/name/protocol-v1-degenchain";
+const subgraphURL = "https://degenchain.subgraph.x.superfluid.dev";
 
 export const followingQuery = (id) => `
 query isFollowing {

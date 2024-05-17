@@ -11,11 +11,44 @@ init(process.env.AIRSTACK_KEY || "");
 
 export async function GET(req) {
   try {
+    // Parse query parameters
+    const url = new URL(req.url);
+    const page = parseInt(url.searchParams.get("page") || "1", 10);
+    const size = parseInt(url.searchParams.get("size") || "10", 10);
+
+    if (isNaN(page) || isNaN(size) || page < 1 || size < 1) {
+      return new NextResponse(
+        JSON.stringify({ error: "Invalid pagination parameters" }),
+        {
+          status: 400,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+    }
+
+    // Fetch the total length of the sortedBalances
+    const totalLength = await kv.zcard("sortedBalances");
+
+    // Calculate the start and end indices for the pagination
+    const startIndex = totalLength - page * size;
+    const endIndex = startIndex + size - 1;
+
+    if (startIndex < 0) {
+      return new NextResponse(JSON.stringify([]), {
+        status: 200,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+    }
+
     // Fetch the sorted leaderboard data by balances directly from KV
     const leaderboardDataRaw: any = await kv.zrange(
       "sortedBalances",
-      0,
-      10000,
+      Math.max(0, startIndex),
+      endIndex,
       {
         withScores: true,
       }
@@ -56,7 +89,7 @@ export async function GET(req) {
     );
 
     // Sort the enriched data by balance (Note: balance may need to be converted from string to number if necessary)
-    const finalLeaderboardData= enrichedLeaderboardData.reverse();
+    const finalLeaderboardData = enrichedLeaderboardData.reverse();
 
     // Return the enriched and sorted leaderboard data with NextResponse
     return new NextResponse(JSON.stringify(finalLeaderboardData), {
@@ -78,5 +111,6 @@ export async function GET(req) {
     );
   }
 }
+
 export const revalidate = 30;
 export const maxDuration = 60;

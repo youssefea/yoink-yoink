@@ -16,7 +16,7 @@ import {
   CheckIsFollowingFarcasterUserInput,
   CheckIsFollowingFarcasterUserOutput,
 } from "@airstack/frames";
-import { URL } from "./../../constants";
+import { URL, DEBUGGER_HUB_URL } from "./../../constants";
 
 init(process.env.AIRSTACK_KEY || "");
 
@@ -64,16 +64,17 @@ export async function POST(req) {
   const { untrustedData } = data;
   const { fid } = untrustedData;
 
-  const frameMessage = await getFrameMessage(data);
-  if (process.env.ENVIRONMENT != "local") {
-    if (!frameMessage || !frameMessage.isValid) {
-      return new NextResponse(_html(messageInvalid, "🚩 Retry", "post", `${URL}`));
-    }
-    if (!frameMessage.recastedCast) {
-      return new NextResponse(
-        _html(didNotRecast, "🚩 Retry", "post", `${URL}`)
-      );
-    }
+  const frameMessage = await getFrameMessage(data, {
+    hubHttpUrl: DEBUGGER_HUB_URL,
+  });
+
+  if (!frameMessage || !frameMessage.isValid) {
+    return new NextResponse(
+      _html(messageInvalid, "🚩 Retry", "post", `${URL}`)
+    );
+  }
+  if (!frameMessage.recastedCast) {
+    return new NextResponse(_html(didNotRecast, "🚩 Retry", "post", `${URL}`));
   }
 
   const fetchDataTotalStreams = await fetch(`${URL}/totalYoinked`);
@@ -83,7 +84,7 @@ export async function POST(req) {
   const fetchDataCurrentYoinkerJson = await fetchDataCurrentYoinker.json();
   const currentYoinker = fetchDataCurrentYoinkerJson.profileHandle;
 
-  const balanceOfAccount: any = await publicClient.readContract({
+  /*const balanceOfAccount: any = await publicClient.readContract({
     address: tokenAddress,
     abi: ERC20ABI,
     functionName: "balanceOf",
@@ -91,7 +92,7 @@ export async function POST(req) {
   });
 
   const totalLeft = Number(formatEther(balanceOfAccount));
-  console.log(totalLeft);
+  console.log(totalLeft);*/
 
   return new NextResponse(
     _html("https://i.imgur.com/ZIfVSfC.png", "🚩YOINK", "post", `${URL}/check`)
